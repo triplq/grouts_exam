@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"sync"
+	"time"
 )
 
 func gen(nums ...int) <-chan int {
@@ -21,8 +23,16 @@ func worker(jobs <-chan int, results chan int, wg *sync.WaitGroup) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		for j := range jobs {
-			results <- j * j
+		for {
+			select {
+			case val, ok := <-jobs:
+				if !ok {
+					return
+				}
+				results <- val * val
+			case <-time.After(3 * time.Second):
+				fmt.Println(errors.New("times out"))
+			}
 		}
 	}()
 }
