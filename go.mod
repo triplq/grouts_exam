@@ -1,3 +1,3 @@
-module github.com/triplq/grouts_exam
+module github.com/triplq/goruts_exam
 
 go 1.25.4
