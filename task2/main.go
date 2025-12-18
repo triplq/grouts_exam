@@ -4,16 +4,11 @@ import (
 	"fmt"
 	"sync"
 	"time"
+
+	"github.com/triplq/goruts_exam/utils"
 )
 
-func generator(ch chan int) {
-	defer close(ch)
-	for i := 0; i < 100; i++ {
-		ch <- i
-	}
-}
-
-func reader(ch chan int, wg *sync.WaitGroup) {
+func reader(ch <-chan int, wg *sync.WaitGroup) {
 	timer := time.NewTimer(3 * time.Second)
 	defer timer.Stop()
 	defer wg.Done()
@@ -38,8 +33,9 @@ func reader(ch chan int, wg *sync.WaitGroup) {
 func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
-	ch := make(chan int)
-	go generator(ch)
+
+	ch := utils.Generator_by_range(100)
+
 	go reader(ch, &wg)
 
 	wg.Wait()

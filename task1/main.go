@@ -32,7 +32,7 @@ func main() {
 	Workers := 5
 	wg.Add(Workers)
 
-	jobs := utils.Gen(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
+	jobs := utils.Generator_by_slice(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
 	results := make(chan int, 5)
 
 	for range Workers {
